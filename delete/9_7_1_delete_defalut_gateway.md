@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# ルートテーブルの削除
+# デフォルトゲートウェイの削除
 
 ## 1. 値の設定
 
@@ -10,6 +10,10 @@
 ### 1.2. ルートテーブル名
 
     ROUTE_TABLE_NAME='public_route_table'
+
+### 1.3. ルートを設定するCIDR
+
+    DEST_CIDR='0.0.0.0/0'
 
 ## 2. メイン処理
 
@@ -22,18 +26,19 @@
             --output text \
     ) && echo ${ROUTE_TABLE_ID}
 
-### 2.2. ルートテーブル削除
+### 2.2. ルートの追加
 
-    aws ec2 delete-route-table \
-        --route-table-id ${ROUTE_TABLE_ID}
+    aws ec2 delete-route \
+        --route-table-id ${ROUTE_TABLE_ID} \
+        --destination-cidr-block ${DEST_CIDR}
 
 ## 3. 確認
 
-### 3.1. ルートテーブルの確認
+### 3.1. ルートの確認
 
-出力がなければOK
+出力がないことを確認
 
     aws ec2 describe-route-tables \
-        --filters Name=tag:Name,Values=${ROUTE_TABLE_NAME}  \
-        --query 'RouteTables[].Tags[?Key == `Name`].Value' \
+        --route-table-ids ${ROUTE_TABLE_ID} \
+        --query "RouteTables[].Routes[?DestinationCidrBlock == \`${DEST_CIDR}\`].GatewayId" \
         --output text
