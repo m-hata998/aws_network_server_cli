@@ -45,7 +45,7 @@
 
 ### 3.1. アタッチされたVPCの確認
 
-出力がなければOK
+出力がないことを確認
 
     aws ec2 describe-internet-gateways \
         --filters Name=tag:Name,Values=${INET_GW_NAME}  \

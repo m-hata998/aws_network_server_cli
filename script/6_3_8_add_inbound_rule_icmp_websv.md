@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# インバウンドルールの設定
+# インバウンドルールの設定(db)
 
 ## 1. 値の設定
 
@@ -21,11 +21,11 @@
 
 ### 1.5. ルール設定JSONファイル名称
 
-    INBOUND_RULE_DOC_NAME='securitygroup-inbound-rule-web'
+    INBOUND_RULE_DOC_NAME='securitygroup-inbound-rule-icmp'
 
-### 1.2. 送信元ポート
+### 1.6. プロトコル
 
-    FROM_PORT='80'
+    IP_PROTOCOL='icmp'
 
 ## 2. メイン処理
 
@@ -53,7 +53,7 @@
     FILE_INBOUND_RULE_DOC="${DIR_INBOUND_RULE_DOC}/${INBOUND_RULE_DOC_NAME}.json" \
     && echo ${FILE_INBOUND_RULE_DOC}
 
-### 2.4. SSHのインバウンドルールの設定
+### 2.4. DBのインバウンドルールの設定
 
     aws ec2 authorize-security-group-ingress \
         --group-id ${SECURITY_GROUP_ID} \
@@ -63,43 +63,39 @@
 
 ### 3.1. プロトコルの確認
 
-IPプロトコル[tcp]が表示されることを確認
+IPプロトコル[icmp]が表示されることを確認
 
     aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-                Name=ip-permission.from-port,Values=${FROM_PORT} \
-            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].IpProtocol" \
-            --output text
+        --filters Name=vpc-id,Values=${VPC_ID} \
+            Name=group-name,Values=${SECURIYT_GROUP_NAME} \
+        --query "SecurityGroups[].IpPermissions[?IpProtocol == \`${IP_PROTOCOL}\`].IpProtocol" \
+        --output text
 
 ### 3.2. 送信元ポートの確認
 
-送信元ポート[80]が表示されることを確認
+送信元ポート[-1]が表示されることを確認
 
     aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].FromPort" \
-            --output text
+        --filters Name=vpc-id,Values=${VPC_ID} \
+            Name=group-name,Values=${SECURIYT_GROUP_NAME} \
+        --query "SecurityGroups[].IpPermissions[?IpProtocol == \`${IP_PROTOCOL}\`].FromPort" \
+        --output text
 
 ### 3.3. 送信先ポートの確認
 
-送信先ポート[80]が表示されることを確認
+送信先ポート[-1]が表示されることを確認
 
     aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].ToPort" \
-            --output text
+        --filters Name=vpc-id,Values=${VPC_ID} \
+            Name=group-name,Values=${SECURIYT_GROUP_NAME} \
+        --query "SecurityGroups[].IpPermissions[?IpProtocol == \`${IP_PROTOCOL}\`].ToPort" \
+        --output text
 
 ### 3.4. CIDRの確認
 
-CIDR[0.0.0.0/0 0.0.0.0/0]が表示されることを確認
-
-※JMESPATHでQuery内でフィルタした後の出力がなんかうまくいかない※
+表示されたJSON内に"CidrIp": "0.0.0.0/0"が表示されることを確認
 
     aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query "SecurityGroups[].IpPermissions[].IpRanges[].CidrIp" \
-            --output text
+        --filters Name=vpc-id,Values=${VPC_ID} \
+            Name=group-name,Values=${SECURIYT_GROUP_NAME} \
+        --query "SecurityGroups[].IpPermissions[?IpProtocol == \`${IP_PROTOCOL}\`].IpRanges[]"

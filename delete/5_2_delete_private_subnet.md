@@ -13,7 +13,7 @@
 
 ### 1.3. サブネット名
 
-    SUBNET_NAME='public_subnet'
+    SUBNET_NAME='private_subnet'
 
 ## 2. メイン処理
 

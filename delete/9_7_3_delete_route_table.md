@@ -31,7 +31,7 @@
 
 ### 3.1. ルートテーブルの確認
 
-出力がなければOK
+出力がないことを確認
 
     aws ec2 describe-route-tables \
         --filters Name=tag:Name,Values=${ROUTE_TABLE_NAME}  \

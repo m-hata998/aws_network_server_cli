@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# EC2の終了
+# EC2の起動
 
 ## 1. 値の設定
 
@@ -9,7 +9,7 @@
 
 ### 1.2. EC2の名称
 
-    EC2_TAG_NAME='web_server'
+    EC2_TAG_NAME='db_server'
 
 ## 2. メイン処理
 
@@ -18,25 +18,24 @@
     ARRAY_EC2_INSTANCE_IDS=$(  \
         aws ec2 describe-instances \
             --filters Name=tag-key,Values=Name \
-                        Name=tag-value,Values=${EC2_TAG_NAME} \
+                        Name=tag-value,Values="${EC2_TAG_NAME}" \
             --query Reservations[].Instances[].InstanceId \
             --output text
     ) && echo ${ARRAY_EC2_INSTANCE_IDS}
 
-### 2.2. インスタンスの停止
+### 2.2. インスタンスの開始
 
-    aws ec2 terminate-instances \
+    aws ec2 start-instances \
         --instance-ids ${ARRAY_EC2_INSTANCE_IDS}
 
 ## 3. 確認
 
 ### 3.1. インスタンスの停止確認
 
-出力がなければOK
+[running]が出力されたらOK。  
+[pending]が出力される場合は時間をおいて再確認。
 
     aws ec2 describe-instances \
-        --filters Name=tag-key,Values=Name \
-                    Name=tag-value,Values=${EC2_TAG_NAME} \
-                    Name=instance-state-name,Values=running \
-        --query Reservations[].Instances[].Tags[].Value \
+        --instance-ids ${ARRAY_EC2_INSTANCE_IDS} \
+        --query 'Reservations[].Instances[].State.Name' \
         --output text

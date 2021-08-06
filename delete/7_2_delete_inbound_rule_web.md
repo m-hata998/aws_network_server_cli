@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# インバウンドルールの削除
+# インバウンドルールの削除(web)
 
 ## 1. 値の設定
 
@@ -21,7 +21,11 @@
 
 ### 1.5. ルール設定JSONファイル名称
 
-    INBOUND_RULE_DOC_NAME='securitygroup-inbound-rule'
+    INBOUND_RULE_DOC_NAME='securitygroup-inbound-rule-web'
+
+### 1.6. 送信元ポート
+
+    FROM_PORT='80'
 
 ## 2. メイン処理
 
@@ -51,7 +55,7 @@
 
 #### 2.3.1. ファイルの存在確認
 
-ファイルが存在しない場合は[3_2_create_ip_rule_doc]の手順でファイルを作成
+ファイルが存在しない場合は[4_2_1_create_inbound_rule_doc_web]の手順でファイルを作成
 
     ls ${FILE_INBOUND_RULE_DOC}
 
@@ -70,35 +74,5 @@
     aws ec2 describe-security-groups \
             --filters Name=vpc-id,Values=${VPC_ID} \
                 Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query SecurityGroups[].IpPermissions[].IpProtocol \
-            --output text
-
-### 3.2. 送信元ポートの確認
-
-出力がないことを確認
-
-    aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query SecurityGroups[].IpPermissions[].FromPort \
-            --output text
-
-### 3.3. 送信先ポートの確認
-
-出力がないことを確認
-
-    aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query SecurityGroups[].IpPermissions[].ToPort \
-            --output text
-
-### 3.4. CIDRの確認
-
-出力がないことを確認
-
-    aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=${VPC_ID} \
-                Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query SecurityGroups[].IpPermissions[].IpRanges[].CidrIp \
+            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].IpProtocol" \
             --output text

@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# EC2の停止
+# EC2の起動
 
 ## 1. 値の設定
 
@@ -23,7 +23,7 @@
             --output text
     ) && echo ${ARRAY_EC2_INSTANCE_IDS}
 
-### インスタンスの停止
+### 2.2. インスタンスの開始
 
     aws ec2 start-instances \
         --instance-ids ${ARRAY_EC2_INSTANCE_IDS}

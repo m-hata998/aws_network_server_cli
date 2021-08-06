@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# VPCの削除
+# DNSホスト名の無効化
 
 ## 1. 値の設定
 
@@ -22,18 +22,19 @@
             --output text \
     ) && echo ${VPC_ID}
 
-### 2.2. VPC削除
+### 2.2. DNSホスト名の無効化
 
-    aws ec2 delete-vpc \
-        --vpc-id ${VPC_ID}
+    aws ec2 modify-vpc-attribute \
+        --vpc-id ${VPC_ID}  \
+        --no-enable-dns-hostnames
 
 ## 3. 確認
 
-### 3.1. VPCの確認
+### 3.1. DNSホスト名無効化の確認
 
-出力がないことを確認
+[false]が表示されることを確認
 
-    aws ec2 describe-vpcs \
-        --filters Name=tag:Name,Values=${VPC_TAG_NAME}  \
-        --query 'Vpcs[].Tags[?Key == `Name`].Value' \
-        --output text
+    aws ec2 describe-vpc-attribute \
+        --vpc-id ${VPC_ID} \
+        --attribute enableDnsHostnames \
+        --query EnableDnsHostnames.Value

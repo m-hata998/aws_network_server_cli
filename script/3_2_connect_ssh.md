@@ -15,7 +15,7 @@
 
     DIR_KEY_PAIR_DOC="${HOME}/environment/ec2-conf"
 
-### 1.2. EC2の名称
+### 1.4. EC2の名称
 
     EC2_TAG_NAME='web_server'
 
@@ -26,7 +26,7 @@
     FILE_KEY_PAIR_DOC=${DIR_KEY_PAIR_DOC}/${KEY_PAIR}.pem \
     && echo ${FILE_KEY_PAIR_DOC}
 
-### 権限設定
+#### 2.1.1. 権限設定(初回のみ)
 
     chmod 400 ${FILE_KEY_PAIR_DOC}
 
@@ -41,11 +41,11 @@
             --output text
     ) && echo ${EC2_PUBLIC_IP}
 
-### ターミナルからSSH接続
+### 2.3. ターミナルからSSH接続
 
     ssh -i ${FILE_KEY_PAIR_DOC} ec2-user@${EC2_PUBLIC_IP}
 
-Are you sure you want to continue connecting (yes/no)?  と表示されたら[yes]を入力(初回のみ)
+Are you sure you want to continue connecting (yes/no)?  と表示されたら[yes]を入力
 
 下記のログイン画面が表示されたらOK
 
