@@ -98,8 +98,7 @@ IPプロトコル[tcp]が表示されることを確認
     aws ec2 describe-security-groups \
             --filters Name=vpc-id,Values=${VPC_ID} \
                 Name=group-name,Values=${SECURIYT_GROUP_NAME} \
-            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].IpRanges[]" \
-            --output text
+            --query "SecurityGroups[].IpPermissions[?FromPort == \`${FROM_PORT}\`].IpRanges[]"
 
 ### 3.5. CIDR(V6)の確認
 

@@ -36,7 +36,7 @@
             --output text
     ) && echo ${SECURITY_GROUP_ID}
 
-### 2.2. セキュリティグループ作成
+### 2.2. セキュリティグループ削除
 
     aws ec2 delete-security-group \
         --group-id ${SECURITY_GROUP_ID}

@@ -13,7 +13,7 @@
 
 ## 2. メイン処理
 
-### 2.2. キーペア作成
+### 2.2. キーペア削除
 
     aws ec2 delete-key-pair \
         --key-name ${KEY_PAIR} 

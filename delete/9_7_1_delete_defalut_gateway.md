@@ -26,7 +26,7 @@
             --output text \
     ) && echo ${ROUTE_TABLE_ID}
 
-### 2.2. ルートの追加
+### 2.2. ルートの削除
 
     aws ec2 delete-route \
         --route-table-id ${ROUTE_TABLE_ID} \
