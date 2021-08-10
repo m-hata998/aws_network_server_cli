@@ -7,15 +7,19 @@
 
     export AWS_DEFAULT_REGION='us-west-2'
 
-### 1.2. VPCの名称
+### 1.2. AZの設定
+
+    export AVAILABILITY_ZONE="${AWS_DEFAULT_REGION}c"
+
+### 1.3. VPCの名称
 
     VPC_TAG_NAME='vpc_area'
 
-### 1.3. サブネット名
+### 1.4. サブネット名
 
     SUBNET_NAME='public_subnet'
 
-### 1.4. サブネットCIDR
+### 1.5. サブネットCIDR
 
     SUBNET_CIDR='10.0.1.0/24'
 
@@ -40,7 +44,8 @@
     aws ec2 create-subnet \
         --vpc-id ${VPC_ID} \
         --cidr-block ${SUBNET_CIDR} \
-        --tag-specifications ${STRING_SUBNET_TAG}
+        --tag-specifications ${STRING_SUBNET_TAG} \
+        --availability-zone ${AVAILABILITY_ZONE}
 
 ## 3. 確認
 
