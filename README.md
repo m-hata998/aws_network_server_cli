@@ -9,5 +9,4 @@
 
 ## Cloud9に付与したロールのポリシー
 
-- AmazonVPCFullAccess
 - AmazonEC2FullAccess
